@@ -15,7 +15,7 @@ This is a Streamlit web application that uses Google Gemini AI to automatically 
 ## Live Demo
 
 Access the deployed application here:
-**[Your Streamlit App Link Here]**
+**https://zuntra-task-yniwpwfegmecoyfw2p3saf.streamlit.app/**
 
 ---
 
