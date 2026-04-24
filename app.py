@@ -1,64 +1,79 @@
 import json
 import re
+import streamlit as st
 import google.generativeai as genai
 
-genai.configure(api_key="AIzaSyBugfmCt322KHTlKEQ-C23X10dfzVodeNg")
+
+genai.configure(api_key="AIzaSyB3WJuDoJAqn5LK1_EXCZ3BR-ztg2MJ5lo")
 
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-messages = [
-    "My payment got deducted but service is not activated",
-    "App crashes every time I login",
-    "How to change my email address?"
-]
+st.title("AI Support Ticket Classifier (Batch Mode)")
+
+st.write("Enter messages in JSON array format")
+
+# 🔹 Input
+user_input = st.text_area(
+    "Enter messages",
+    placeholder='["message 1", "message 2", "message 3"]'
+)
 
 
-def classify_message(message):
-    prompt = f"""You are a support ticket classifier.
+def classify_messages(messages):
+    prompt = f"""
+You are a support ticket classifier.
 
-Classify the message into:
+For each message, return a JSON array where each object contains:
+- message
 - category: Billing, Technical Issue, Account, General Inquiry
 - priority: High, Medium, Low
 
-Return ONLY valid JSON. No explanation, no extra text.
+Return ONLY valid JSON array.
 
-Format:
-{{
-  "category": "Billing",
-  "priority": "High"
-}}
-
-Message: "{message}"
+Messages:
+{json.dumps(messages)}
 """
 
     try:
         response = model.generate_content(prompt)
         result = response.text.strip()
 
-        # 🔍 Extract JSON safely (handles extra text)
-        json_text = re.search(r'\{.*\}', result, re.DOTALL)
-        if json_text:
-            parsed = json.loads(json_text.group())
-        else:
-            raise ValueError("No valid JSON found")
+        # Extract JSON array safely
+        match = re.search(r'\[.*\]', result, re.DOTALL)
 
-        return {
-            "message": message,
-            "category": parsed.get("category", "Unknown"),
-            "priority": parsed.get("priority", "Unknown")
-        }
+        if match:
+            return json.loads(match.group())
+        else:
+            return [{
+                "error": "Invalid model response",
+                "raw_output": result
+            }]
 
     except Exception as e:
-        return {
-            "message": message,
+        return [{
             "error": str(e)
-        }
+        }]
 
 
-def process_messages(messages):
-    return [classify_message(msg) for msg in messages]
 
+if st.button("Classify"):
+    if user_input:
+        try:
+            messages = json.loads(user_input)
 
-if __name__ == "__main__":
-    results = process_messages(messages)
-    print(json.dumps(results, indent=2))
+            
+            results = classify_messages(messages)
+
+            st.subheader("Final Output")
+
+           
+            st.code(
+                json.dumps(results, indent=2),
+                language="json"
+            )
+
+        except Exception as e:
+            st.error(f"Invalid JSON input: {str(e)}")
+
+    else:
+        st.warning("Please enter messages")
