@@ -1,79 +1,77 @@
 AI Support Ticket Classifier
+Overview
 
-Description
-This project is an AI-based system that automatically classifies customer support messages into predefined categories and assigns a priority level. It helps reduce manual effort and improves response efficiency.
+This is a Streamlit web application that uses Google Gemini AI to automatically classify customer support messages into categories and assign priority levels. It helps streamline support workflows by enabling fast and consistent ticket triaging.
+
+Live Demo
+https://zuntra-task-yniwpwfegmecoyfw2p3saf.streamlit.app/
+Access the deployed application here:
+
 
 Features
-Classifies support messages into categories
-Assigns priority levels based on urgency
-Uses AI (Google Gemini) for intelligent understanding
-Returns structured JSON output
-Includes error handling
-
-Categories
+Accepts multiple support messages in JSON array format
+Classifies each message into:
 Billing
 Technical Issue
 Account
 General Inquiry
-
-Priority Levels
-High: Urgent or blocking issues
-Medium: Moderate issues
-Low: General or informational queries
-
-Input Example
-"My payment got deducted but service is not activated"
-"App crashes every time I login"
-"How to change my email address?"
-
-Output Example
+Assigns priority levels:
+High
+Medium
+Low
+Returns structured JSON output
+Batch processing support for multiple messages
+Clean and API-like response format
+Input Format
 [
-{
-"message": "My payment got deducted but service is not activated",
-"category": "Billing",
-"priority": "High"
-},
-{
-"message": "App crashes every time I login",
-"category": "Technical Issue",
-"priority": "High"
-},
-{
-"message": "How to change my email address?",
-"category": "Account",
-"priority": "Low"
-}
+  "My payment got deducted but service is not activated",
+  "App crashes every time I login",
+  "How to change my email address?"
 ]
-
-Technologies Used
+Output Format
+[
+  {
+    "message": "My payment got deducted but service is not activated",
+    "category": "Billing",
+    "priority": "High"
+  },
+  {
+    "message": "App crashes every time I login",
+    "category": "Technical Issue",
+    "priority": "High"
+  },
+  {
+    "message": "How to change my email address?",
+    "category": "Account",
+    "priority": "Low"
+  }
+]
+Technology Stack
 Python
-Google Gemini API
-JSON
+Streamlit
+Google Generative AI (Gemini 2.5 Flash)
+JSON Processing
+Regular Expressions
+Installation (Local Setup)
+git clone https://github.com/your-username/support-ticket-classifier.git
+cd support-ticket-classifier
+pip install -r requirements.txt
+streamlit run app.py
+Configuration
 
-Setup Instructions
-Install Python (version 3.8 or above)
-Install required library: pip install google-generativeai
-Add your Gemini API key inside the code
-Run the program: python app.py
+Add your Gemini API key inside the application:
 
-Project Structure
-app.py – Main script
-README.md – Documentation
-
-How It Works
-Takes a list of messages
-Sends them to AI
-AI classifies category and priority
-Returns JSON output
-
-Notes
-Do not upload your API key to GitHub
-Ensure your API key is valid
-
+genai.configure(api_key="YOUR_API_KEY_HERE")
+Limitations
+Free Gemini API tier has limited daily requests
+May return rate limit errors (429) under heavy usage
+Requires stable internet connection for API calls
 Future Improvements
-Add frontend interface
-Store results in database
-Improve accuracy
+Database integration for ticket storage
+Dashboard for analytics and insights
+CSV upload support
+Auto-routing of tickets to departments
+Multi-model fallback system
+Purpose
 
-Author
-Harini R
+This project demonstrates how AI can be used to automate customer support ticket classification and improve response efficiency
