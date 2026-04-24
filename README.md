@@ -136,3 +136,7 @@ genai.configure(api_key="YOUR_API_KEY_HERE")
 ## Purpose
 
 This project demonstrates how AI can be used to automate customer support ticket classification and improve response efficiency.
+
+Author
+
+Harini R
