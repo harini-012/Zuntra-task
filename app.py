@@ -2,10 +2,8 @@ import json
 import re
 import google.generativeai as genai
 
-# 🔑 Replace with your Gemini API key
 genai.configure(api_key="AIzaSyBugfmCt322KHTlKEQ-C23X10dfzVodeNg")
 
-# ✅ Use supported model
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 messages = [
